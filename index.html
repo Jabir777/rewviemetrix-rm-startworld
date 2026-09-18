@@ -1,0 +1,1105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star World · Regional Manager Review Matrix</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#23236F; --indigo:#3A3A9E; --paper:#F6F6FA; --surface:#FFFFFF;
+  --ink:#1B1B33; --ink-soft:#57577A; --line:#DDDCEC; --line-soft:#EEEEF7;
+  --gold:#B8902E; --rm:#00695C; --green:#1E7A4D; --amber:#B8902E; --red:#B71C1C;
+  --chip:#EEEEF7; --radius:14px;
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#14143F; --indigo:#8C8CE8; --paper:#101024; --surface:#1A1A36;
+    --ink:#ECECF6; --ink-soft:#A3A3C4; --line:#2E2E58; --line-soft:#23234A;
+    --gold:#E0B84F; --rm:#4DB6AC; --green:#5FCB92; --amber:#E0B84F; --red:#FF8A80;
+    --chip:#23234A;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#14143F; --indigo:#8C8CE8; --paper:#101024; --surface:#1A1A36;
+  --ink:#ECECF6; --ink-soft:#A3A3C4; --line:#2E2E58; --line-soft:#23234A;
+  --gold:#E0B84F; --rm:#4DB6AC; --green:#5FCB92; --amber:#E0B84F; --red:#FF8A80;
+  --chip:#23234A;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--paper);color:var(--ink);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;}
+h1,h2,h3{font-family:'Sora','Sora Fallback',system-ui,sans-serif;}
+button,input,select{font-family:inherit;color:inherit;}
+:focus-visible{outline:2.5px solid var(--indigo);outline-offset:2px;border-radius:4px;}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;}}
+
+.topbar{position:sticky;top:0;z-index:50;background:var(--navy);color:#fff;padding:10px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.wordmark{font-family:'Sora',sans-serif;font-weight:800;font-size:17px;letter-spacing:.01em;}
+.wordmark span{color:var(--gold);}
+.tag{font-size:10.5px;color:#B7B7E0;letter-spacing:.06em;}
+.spacer{flex:1;}
+.period{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.1);padding:5px 10px;border-radius:10px;}
+.period input{background:transparent;border:none;color:#fff;font-size:12.5px;font-weight:600;}
+.period input::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer;}
+.period b{font-size:11.5px;color:#CFCFF2;font-weight:600;}
+.cycles{display:flex;gap:3px;background:rgba(255,255,255,.08);padding:3px;border-radius:999px;flex-wrap:wrap;}
+.cycles button{padding:7px 15px;border-radius:999px;border:none;background:transparent;color:#CBCBEE;font-weight:600;font-size:12.5px;cursor:pointer;}
+.cycles button[aria-pressed="true"]{background:#fff;color:var(--navy);}
+
+main{max-width:1240px;margin:0 auto;padding:22px 18px 80px;}
+
+/* RM rail — the hero */
+.rail{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin-bottom:20px;}
+.rm-del{position:absolute;top:9px;right:9px;border:none;background:transparent;color:var(--ink-soft);font-size:15px;line-height:1;cursor:pointer;padding:3px 5px;border-radius:6px;}
+.rm-del:hover{background:var(--line-soft);color:var(--red);}
+.add-rm{background:transparent;border:1.5px dashed var(--line);border-radius:var(--radius);padding:14px;color:var(--ink-soft);font-size:13px;font-weight:600;cursor:pointer;min-height:118px;}
+.add-rm:hover{border-color:var(--indigo);color:var(--indigo);}
+.stat-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:16px;}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;}
+.stat .k{font-size:11.5px;color:var(--ink-soft);}
+.stat .v{font-family:'Sora';font-weight:800;font-size:26px;margin-top:2px;}
+.gap-row{display:grid;grid-template-columns:1fr auto;gap:10px;padding:11px 18px;border-bottom:1px solid var(--line-soft);font-size:12.5px;align-items:center;}
+.gap-row .who{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.gap-row .rem{font-size:11px;color:var(--ink-soft);margin-top:3px;font-style:italic;}
+.rm-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 15px;cursor:pointer;text-align:left;position:relative;}
+.rm-card[aria-pressed="true"]{border-color:var(--navy);box-shadow:inset 4px 0 0 var(--navy);}
+.rm-card .who{display:flex;align-items:baseline;gap:8px;margin-bottom:2px;}
+.rm-name{font-family:'Sora';font-weight:700;font-size:15px;color:var(--ink);background:transparent;border:none;width:100%;padding:2px 0;}
+.rm-name:hover{background:var(--line-soft);border-radius:5px;}
+.rm-score{font-family:'Sora';font-weight:800;font-size:30px;line-height:1.1;color:var(--navy);}
+.rm-score small{font-size:13px;font-weight:700;color:var(--ink-soft);}
+.rm-sub{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+.bar{height:7px;background:var(--line-soft);border-radius:99px;overflow:hidden;margin-top:9px;}
+.bar i{display:block;height:100%;background:var(--navy);border-radius:99px;}
+.bar.thin{height:5px;margin-top:5px;}
+
+.layout{display:grid;grid-template-columns:330px 1fr;gap:16px;align-items:start;}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;}
+.panel-head{padding:12px 15px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.panel-head h2{font-size:13.5px;color:var(--ink);}
+.panel-head p{font-size:11.5px;color:var(--ink-soft);}
+
+.rev-item{width:100%;text-align:left;background:transparent;border:none;border-bottom:1px solid var(--line-soft);padding:11px 15px;cursor:pointer;display:block;}
+.rev-item:hover{background:var(--line-soft);}
+.rev-item[aria-pressed="true"]{background:var(--line-soft);box-shadow:inset 3px 0 0 var(--rm);}
+.rev-item .t{font-size:13px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:baseline;}
+.rev-item .m{font-size:11px;color:var(--ink-soft);margin-top:2px;}
+.pct{font-family:'Sora';font-weight:700;font-size:12.5px;white-space:nowrap;}
+.ok{color:var(--green);} .watch{color:var(--amber);} .gap{color:var(--red);} .none{color:var(--ink-soft);}
+
+.detail-head{padding:16px 18px;border-bottom:1px solid var(--line);}
+.detail-head h2{font-size:18px;color:var(--ink);margin-bottom:5px;}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.meta span{font-size:11px;background:var(--chip);color:var(--ink-soft);padding:4px 9px;border-radius:7px;}
+.meta span b{color:var(--ink);font-weight:600;}
+
+.mtable{width:100%;border-collapse:collapse;font-size:12.5px;}
+.mtable th{background:var(--navy);color:#fff;padding:9px 10px;text-align:left;font-size:11px;font-weight:600;}
+.mtable td{padding:10px;border-bottom:1px solid var(--line-soft);vertical-align:top;}
+.mtable tr:last-child td{border-bottom:none;}
+.m-name{font-weight:600;font-size:12.5px;}
+.m-what{font-size:11px;color:var(--ink-soft);margin-top:3px;max-width:34ch;}
+.m-src{font-size:10.5px;color:var(--ink-soft);margin-top:4px;}
+.num{width:92px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:12.5px;text-align:right;}
+.num:hover{border-color:var(--indigo);}
+.unit{font-size:10.5px;color:var(--ink-soft);display:block;margin-top:3px;text-align:right;}
+.ach{font-family:'Sora';font-weight:700;font-size:14px;}
+.chip{display:inline-block;font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;}
+.chip.ok{background:rgba(30,122,77,.12);} .chip.watch{background:rgba(184,144,46,.15);}
+.chip.gap{background:rgba(183,28,28,.12);} .chip.none{background:var(--chip);}
+.note{width:100%;min-width:130px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:12px;}
+
+.closeout{padding:14px 18px;border-top:1px solid var(--line);display:flex;gap:18px;flex-wrap:wrap;align-items:flex-end;}
+.field label{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px;}
+.field .num{width:80px;text-align:left;}
+.btn{background:var(--navy);color:#fff;border:none;padding:9px 15px;border-radius:9px;font-weight:600;font-size:12.5px;cursor:pointer;}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+
+.cmp{width:100%;border-collapse:collapse;font-size:12.5px;}
+.cmp th{background:var(--navy);color:#fff;padding:9px 10px;text-align:left;font-size:11px;font-weight:600;}
+.cmp td{padding:9px 10px;border-bottom:1px solid var(--line-soft);}
+.cmp td.n{text-align:center;}
+.scroll{overflow-x:auto;}
+.dict-group{padding:14px 18px;border-bottom:1px solid var(--line-soft);}
+.dict-group h3{font-size:13px;color:var(--ink);margin-bottom:8px;}
+.dict-group ul{list-style:none;display:grid;gap:7px;}
+.dict-group li{font-size:12px;padding-left:12px;border-left:2px solid var(--line);}
+.dict-group li b{font-weight:600;}
+.dict-group li span{color:var(--ink-soft);}
+.subtabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap;}
+.subtabs button{padding:7px 14px;border-radius:9px;border:1px solid var(--line);background:var(--surface);font-size:12.5px;font-weight:600;cursor:pointer;color:var(--ink-soft);}
+.subtabs button[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
+.sync{font-size:11px;color:var(--ink-soft);padding:8px 2px 0;}
+.standalone-warn{background:#FFF3E0;border:1px solid #E0B84F;color:#7a5a13;font-size:12.5px;padding:11px 14px;border-radius:10px;margin-bottom:16px;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .standalone-warn{background:#3A2E12;color:#F0D48A;border-color:#8a6a1f;}}
+:root[data-theme="dark"] .standalone-warn{background:#3A2E12;color:#F0D48A;border-color:#8a6a1f;}
+.empty{padding:34px 18px;text-align:center;color:var(--ink-soft);font-size:13px;}
+.csv-fallback{position:fixed;inset:0;background:rgba(20,20,50,.5);display:flex;align-items:center;justify-content:center;z-index:100;padding:20px;}
+.csv-box{background:var(--surface);border-radius:var(--radius);max-width:640px;width:100%;max-height:80vh;display:flex;flex-direction:column;overflow:hidden;}
+.csv-box header{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;}
+.csv-box header h3{font-size:14px;}
+.csv-box textarea{flex:1;min-height:280px;margin:14px 18px;padding:10px;border:1px solid var(--line);border-radius:8px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:var(--paper);color:var(--ink);resize:vertical;}
+.csv-box footer{padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;}
+.csv-note{font-size:11.5px;color:var(--ink-soft);padding:0 18px 10px;}
+
+/* ---- manage reviews ---- */
+.mng-row{display:flex;gap:10px;align-items:flex-start;padding:12px 15px;border-bottom:1px solid var(--line-soft);}
+.mng-row:last-child{border-bottom:none;}
+.mng-info{flex:1;min-width:0;}
+.mng-info .t{font-size:13px;font-weight:600;}
+.mng-info .m{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+.mng-actions{display:flex;gap:6px;flex-shrink:0;}
+.icon-btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 11px;font-size:12px;font-weight:600;cursor:pointer;color:var(--ink);}
+.icon-btn:hover{border-color:var(--indigo);color:var(--indigo);}
+.icon-btn.danger:hover{border-color:var(--red);color:var(--red);}
+.add-review{width:100%;text-align:center;padding:13px;border:none;background:transparent;color:var(--indigo);font-weight:600;font-size:13px;cursor:pointer;}
+.add-review:hover{background:var(--line-soft);}
+.editor{padding:16px 18px;}
+.efield{margin-bottom:12px;}
+.efield label{display:block;font-size:11.5px;color:var(--ink-soft);margin-bottom:4px;font-weight:600;}
+.efield input,.efield textarea,.efield select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:9px;background:var(--paper);color:var(--ink);font-size:13px;}
+.efield textarea{resize:vertical;min-height:44px;}
+.erow2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.mrow{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;position:relative;}
+.mrow .mgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.mrow .mgrid3{display:grid;grid-template-columns:1fr 90px 70px;gap:9px;margin-top:9px;}
+.mrow .rm-metric{position:absolute;top:8px;right:8px;background:transparent;border:none;color:var(--ink-soft);font-size:15px;cursor:pointer;padding:2px 6px;border-radius:6px;}
+.mrow .rm-metric:hover{background:var(--line-soft);color:var(--red);}
+.add-metric{width:100%;padding:9px;border:1.5px dashed var(--line);border-radius:9px;background:transparent;color:var(--ink-soft);font-size:12.5px;font-weight:600;cursor:pointer;}
+.add-metric:hover{border-color:var(--indigo);color:var(--indigo);}
+.editor-actions{display:flex;gap:10px;justify-content:flex-end;padding-top:6px;}
+.mtitle{font-size:12px;font-weight:700;color:var(--ink-soft);margin:16px 0 4px;text-transform:uppercase;letter-spacing:.03em;}
+@media(max-width:940px){
+  .layout{grid-template-columns:1fr;}
+  .rail{grid-template-columns:1fr;}
+}
+
+/* ---- printable report ---- */
+.report-controls{display:flex;gap:16px;align-items:flex-end;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin-bottom:16px;}
+.report-controls label{display:block;font-size:11px;color:var(--ink-soft);margin-bottom:4px;}
+.report-controls select{padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--paper);font-size:12.5px;min-width:170px;}
+#printable{background:#fff;color:#1B1B33;border:1px solid var(--line);border-radius:var(--radius);padding:28px 30px;}
+.rp-head{border-bottom:3px solid #23236F;padding-bottom:12px;margin-bottom:18px;}
+.rp-brand{font-family:'Sora';font-weight:800;font-size:15px;color:#23236F;letter-spacing:.02em;}
+.rp-brand span{color:#B8902E;}
+.rp-head h1{font-family:'Sora';font-size:19px;color:#23236F;margin:6px 0 4px;}
+.rp-meta{font-size:11.5px;color:#57577A;}
+.rp-manager{margin-bottom:22px;page-break-inside:avoid;}
+.rp-mhead{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;border-bottom:1.5px solid #23236F;padding-bottom:6px;margin-bottom:10px;}
+.rp-mhead h3{font-family:'Sora';font-size:15px;color:#23236F;}
+.rp-mstat{font-size:11.5px;color:#57577A;}
+.rp-review{margin-bottom:14px;page-break-inside:avoid;}
+.rp-review h4{font-size:12.5px;color:#1B1B33;margin-bottom:5px;display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;}
+.rp-when{font-weight:400;color:#57577A;font-size:11px;}
+.rp-score{margin-left:auto;font-family:'Sora';font-weight:700;font-size:12.5px;}
+.rp-table{width:100%;border-collapse:collapse;font-size:10.5px;}
+.rp-table th{background:#23236F;color:#fff;padding:5px 6px;text-align:left;font-size:9.5px;text-transform:uppercase;font-weight:600;}
+.rp-table td{padding:5px 6px;border-bottom:1px solid #DDDCEC;vertical-align:top;}
+.rp-table td.n{text-align:center;white-space:nowrap;}
+.rp-what{color:#57577A;font-size:9.5px;margin-top:1px;}
+.rp-out{font-size:10px;color:#57577A;margin-top:4px;font-style:italic;}
+.rp-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;}
+.rp-ok{color:#1E7A4D;} .rp-watch{color:#B8902E;} .rp-gap{color:#B71C1C;} .rp-none{color:#57577A;}
+span.rp-ok,span.rp-tag.rp-ok{background:rgba(30,122,77,.12);} span.rp-tag.rp-watch{background:rgba(184,144,46,.15);}
+span.rp-tag.rp-gap{background:rgba(183,28,28,.12);} span.rp-tag.rp-none{background:#EEEEF7;}
+.rp-foot{border-top:1px solid #DDDCEC;margin-top:10px;padding-top:8px;font-size:10px;color:#57577A;}
+
+@media print{
+  body *{visibility:hidden;}
+  #printable,#printable *{visibility:visible;}
+  #printable{position:absolute;left:0;top:0;width:100%;border:none;padding:0;box-shadow:none;}
+  .no-print,.report-controls{display:none!important;}
+  @page{margin:14mm;}
+  .rp-manager{break-inside:avoid;}
+  .rp-review{break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <div class="wordmark">STAR <span>WORLD</span></div>
+    <div class="tag">Regional Manager Review Matrix</div>
+  </div>
+  <div class="spacer"></div>
+  <div class="period">
+    <b id="period-label">Period</b>
+    <input type="date" id="period-date" aria-label="Review date">
+  </div>
+  <div class="cycles" id="cycles" role="group" aria-label="Review cycle"></div>
+</header>
+
+<main>
+  <div id="standalone-banner"></div>
+  <div class="rail" id="rail"></div>
+
+  <div class="subtabs" id="subtabs" role="group" aria-label="View">
+    <button data-view="dashboard" aria-pressed="false">Dashboard</button>
+    <button data-view="matrix" aria-pressed="true">Review matrix</button>
+    <button data-view="compare" aria-pressed="false">Compare the three Regional Managers</button>
+    <button data-view="dictionary" aria-pressed="false">Metric dictionary</button>
+    <button data-view="manage" aria-pressed="false">Manage reviews</button>
+    <button data-view="report" aria-pressed="false">Print report</button>
+  </div>
+
+  <div id="view-report" hidden></div>
+  <div id="view-manage" hidden></div>
+
+  <div id="view-matrix">
+    <div class="layout">
+      <section class="panel" aria-label="Reviews in this cycle">
+        <div class="panel-head">
+          <h2 id="list-title">Reviews</h2>
+          <div class="spacer"></div>
+          <p id="list-sub"></p>
+        </div>
+        <div id="rev-list"></div>
+      </section>
+      <section class="panel" id="detail" aria-label="Metrics"></section>
+    </div>
+    <p class="sync" id="sync-note">Saving to this browser.</p>
+  </div>
+
+  <div id="view-dashboard" hidden></div>
+  <div id="view-compare" hidden></div>
+  <div id="view-dictionary" hidden></div>
+</main>
+
+<script>
+/* ============================================================
+   STAR WORLD — RM REVIEW MATRIX
+   Reviews taken from the Star World Review Calendar (Sections 2–5, 7).
+   Only reviews an RM leads or attends are included.
+   m(id, name, whatIsEvaluated, dataSource, unit, direction, weight)
+   direction: 'up' = higher is better, 'down' = lower is better
+   ============================================================ */
+function m(id,name,what,src,unit,dir,w){return {id,name,what,src,unit,dir:dir||'up',w:w||1};}
+
+const BASE_REVIEWS=[
+/* ---------------- DAILY ---------------- */
+{id:'d-huddle',cycle:'Daily',name:'Sales Huddle',when:'Start of day · Mon–Thu & Sat',lead:'RM',people:'RM + BM + Sales Team',output:'Daily targets & action points',metrics:[
+  m('sales_y',"Yesterday's sales vs target","Value booked yesterday against the day target for the region",'Sales register / ERP day report','₹','up',3),
+  m('target_t',"Today's target locked",'Branches with today target communicated and accepted','Huddle sheet','Branches','up',1),
+  m('fu_plan','Customer follow-ups planned','Follow-up calls listed for the day across branches','CRM follow-up list','Nos','up',1),
+  m('b2b_plan','B2B visits planned','Field visits scheduled for the day','Visit plan','Visits','up',1),
+  m('dormant_plan','Dormant calls planned','Dormant customers allotted for calling today','Dormant customer list','Nos','up',1),
+  m('coll_plan','Collection priority set','Amount targeted for collection today','Outstanding statement','₹','up',2),
+  m('priority','Key priorities agreed','Priority actions written and owner named','Huddle sheet','Nos','up',1)]},
+
+{id:'d-dar',cycle:'Daily',name:'DAR Review (BM → RM)',when:'End of day',lead:'RM',people:'BM → RM',output:'DAR compliance & actions',metrics:[
+  m('dar_sub','DAR submission','Branches that submitted the Daily Activity Report on time','DAR system','Branches','up',3),
+  m('calls','Sales calls made','Calls logged by the sales team','DAR','Nos','up',2),
+  m('visits','Customer visits done','Visits completed against visits planned','DAR','Visits','up',2),
+  m('fu_done','Follow-ups closed','Follow-ups completed out of those due','CRM','Nos','up',2),
+  m('issues_log','Issues logged','Branch issues raised for RM action','DAR','Nos','up',1)]},
+
+{id:'d-react',cycle:'Daily',name:'Customer Reactivation Review',when:'End of day',lead:'RM',people:'Sales Executive → BM → RM',output:'Reactivation follow-up list',metrics:[
+  m('r_calls','Calls made','Dormant customers called today','Call log','Nos','up',2),
+  m('r_conn','Customers connected','Calls that reached the customer','Call log','Nos','up',2),
+  m('r_int','Interested customers','Connected customers showing buying interest','CRM','Nos','up',2),
+  m('r_fu','Follow-ups scheduled','Next contact date fixed','CRM','Nos','up',1),
+  m('r_act','Customers reactivated','Dormant customers who placed an order','Sales register','Nos','up',3)]},
+
+{id:'d-coll',cycle:'Daily',name:'Collection Review',when:'Daily',lead:'RM',people:'BM / RM + Sales Team',output:'Collection follow-up',metrics:[
+  m('c_out','Outstanding balance','Total receivable open at end of day','Finance ledger','₹','down',2),
+  m('c_due','Amount due today','Invoices falling due today','Ageing report','₹','up',1),
+  m('c_prom','Promised payments','Value customers committed to pay','Collection sheet','₹','up',2),
+  m('c_rec','Amount collected','Cash and bank receipts booked today','Receipt register','₹','up',3),
+  m('c_ptp','Promises kept','Promised payments actually received','Receipt register','Nos','up',2)]},
+
+{id:'d-stock',cycle:'Daily',name:'Stock Exception Review',when:'Daily',lead:'RM',people:'BM / RM + Inventory & Purchase where required',output:'Stock action',metrics:[
+  m('s_short','Shortage lines','Fast-selling items out of stock at branches','Inventory report','Items','down',3),
+  m('s_exp','Near-expiry value','Stock value inside the expiry watch window','Expiry report','₹','down',2),
+  m('s_slow','Slow-moving value','Value of items with no movement in the set period','Stock ageing','₹','down',2),
+  m('s_dead','Dead stock value','Value of non-moving stock carried','Stock ageing','₹','down',2),
+  m('s_fill','Fast-mover availability','Fast-moving SKUs available across branches','Inventory report','%','up',2)]},
+
+{id:'d-crit',cycle:'Daily',name:'Critical Issue Review',when:'Daily',lead:'RM',people:'RM / GM',output:'Escalation or corrective action',metrics:[
+  m('k_raised','Critical issues raised','Sales, customer, stock or finance exceptions reported','Issue log','Nos','up',1),
+  m('k_closed','Issues closed same day','Exceptions resolved within the day','Issue log','Nos','up',3),
+  m('k_esc','Escalated to GM','Issues passed up because RM could not close them','Issue log','Nos','down',1),
+  m('k_age','Issues open beyond 24 hours','Ageing exceptions still unresolved','Issue log','Nos','down',2)]},
+
+/* ---------------- WEEKLY ---------------- */
+{id:'w-plan',cycle:'Weekly',name:'Weekly Target & Action Planning',when:'Monday',lead:'RM',people:'RM + BM + Sales Team',output:'Weekly action plan',metrics:[
+  m('wp_target','Weekly target allocated','Region target split branch-wise and accepted','Target sheet','₹','up',3),
+  m('wp_prior','Branch priorities defined','Branches with written priorities for the week','Plan sheet','Branches','up',1),
+  m('wp_calls','Outbound call plan','Calls committed for the week','Call plan','Nos','up',2),
+  m('wp_b2b','B2B visit plan','Visits committed for the week','Visit plan','Visits','up',2),
+  m('wp_react','Reactivation target','Dormant customers to be revived this week','Dormant list','Nos','up',2),
+  m('wp_coll','Collection target','Receivable value targeted for the week','Ageing report','₹','up',3)]},
+
+{id:'w-visit',cycle:'Weekly',name:'Branch Performance / Regional Manager Visit Review',when:'Tuesday',lead:'RM',people:'RM + BM + Sales Team',output:'Branch corrective actions',metrics:[
+  m('wv_visit','Branches visited','Branches physically covered this week','Visit log','Branches','up',3),
+  m('wv_sales','Branch sales vs target','Week-to-date achievement of visited branches','ERP','₹','up',3),
+  m('wv_prod','Sales Executive productivity','Sales per executive against the productivity norm','ERP','₹','up',2),
+  m('wv_ops','Branch operations score','Discipline, cleanliness, display and SOP check score','Visit checklist','Score','up',2),
+  m('wv_cust','Customer issues closed','Branch-level complaints settled','Complaint log','Nos','up',2),
+  m('wv_stock','Stock health at branch','Availability of listed must-stock items','Inventory report','%','up',2),
+  m('wv_staff','Staff performance flags','Executives below the performance line','Performance sheet','Nos','down',1)]},
+
+{id:'w-mktg',cycle:'Weekly',name:'Marketing Coordination Meeting',when:'Wednesday',lead:'RM',people:'RM + Marketing / Digital Team + relevant BM',output:'Marketing action plan',metrics:[
+  m('wm_camp','Campaigns running','Active digital and offline campaigns for the region','Marketing tracker','Nos','up',1),
+  m('wm_leads','Leads generated','Enquiries received from campaigns this week','Lead sheet','Nos','up',3),
+  m('wm_conv','Leads converted','Leads that turned into orders','CRM','Nos','up',3),
+  m('wm_resp','Lead response time','Average time taken to contact a new lead','CRM','Hours','down',2),
+  m('wm_content','Branch content posted','Posts and product content published for branches','Content calendar','Nos','up',1),
+  m('wm_offer','Offer compliance','Branches displaying the running offer correctly','Visit check','Branches','up',1)]},
+
+{id:'w-close',cycle:'Weekly',name:'Sales & Collection Closure Review',when:'Thursday',lead:'RM',people:'RM + BM + Sales Team',output:'Closure actions',metrics:[
+  m('wc_sales','Weekly sales achieved','Sales booked against the weekly target','ERP','₹','up',3),
+  m('wc_quote','Pending quotations value','Quotations awaiting customer decision','CRM','₹','down',2),
+  m('wc_order','Quotation conversion','Quotations converted into confirmed orders','CRM','%','up',3),
+  m('wc_coll','Collection achieved','Receipts booked against the weekly collection target','Receipt register','₹','up',3),
+  m('wc_over','Overdue reduction','Reduction in overdue receivable during the week','Ageing report','₹','up',2),
+  m('wc_out','Outbound activity completion','Planned calls and visits actually completed','DAR','%','up',2)]},
+
+{id:'w-scorecard',cycle:'Weekly',name:'Regional Manager Weekly Scorecard',when:'Before the GM review',lead:'RM',people:'Regional Manager (self-assessment, tabled to GM)',output:'Regional position for the GM review',metrics:[
+  m('sc_bt','Branch-wise target vs actual','Every branch measured against its weekly target','ERP','%','up',3),
+  m('sc_prod','Sales Executive productivity','Output per executive against the norm','ERP','₹','up',2),
+  m('sc_dorm','Dormant customer campaign','Dormant customers touched during the week','Dormant list','Nos','up',2),
+  m('sc_new','New customer acquisition','First-time buyers added','Sales register','Nos','up',3),
+  m('sc_rep','Repeat customer follow-up','Repeat buyers contacted and retained','CRM','Nos','up',2),
+  m('sc_quote','Quotations and pending orders','Open quotations and undelivered orders','CRM','Nos','down',2),
+  m('sc_coll','Collection and overdue accounts','Collection achieved and overdue accounts pending','Ageing report','₹','up',3),
+  m('sc_age','Stock ageing','Value of stock crossing the ageing limit','Stock ageing','₹','down',2),
+  m('sc_ops','Branch operations','Operational checks cleared across branches','Visit checklist','Score','up',1),
+  m('sc_dar','DAR compliance','Daily reports submitted on time during the week','DAR system','%','up',2),
+  m('sc_comp','Customer complaints','Complaints received and pending','Complaint log','Nos','down',2),
+  m('sc_corr','Corrective actions','Previous action points closed on time','Task Management System','%','up',3)]},
+
+{id:'w-gm',cycle:'Weekly',name:'Weekly Business Review – GM',when:'Saturday',lead:'GM',people:'GM + RM + Department Heads as required',output:'GM action plan',metrics:[
+  m('g_sales','Region sales','Total sales presented to GM for the week','ERP','₹','up',3),
+  m('g_profit','Profit contribution','Gross margin earned by the region','Finance report','%','up',3),
+  m('g_coll','Collection','Receipts against the weekly commitment','Finance report','₹','up',3),
+  m('g_stock','Stock position','Stock value and health of the region','Inventory report','₹','down',2),
+  m('g_mktg','Marketing outcome','Leads and conversions credited to the region','Marketing tracker','Nos','up',1),
+  m('g_hr','Manpower position','Vacancies and attendance in the region','HR report','Nos','down',1),
+  m('g_risk','Risks flagged','Risks raised by the RM for GM decision','Review minutes','Nos','up',1),
+  m('g_close','Previous actions closed','Last week action points completed','Task Management System','%','up',3)]},
+
+/* ---------------- MONTHLY ---------------- */
+{id:'m-closing',cycle:'Monthly',name:'Previous Month Closing Review',when:'1st–3rd working day',lead:'RM',people:'BM + RM',output:'Month closing position',metrics:[
+  m('mc_sales','Monthly sales','Sales booked for the closed month','ERP','₹','up',3),
+  m('mc_ach','Target achievement','Achievement against the month target','ERP','%','up',3),
+  m('mc_coll','Collection achieved','Receipts booked during the month','Finance report','₹','up',3),
+  m('mc_stock','Closing stock value','Stock carried into the new month','Inventory report','₹','down',2),
+  m('mc_cust','Active customers','Customers who bought during the month','Sales register','Nos','up',2)]},
+
+{id:'m-region',cycle:'Monthly',name:'Regional Performance Review',when:'1st week',lead:'RM',people:'RM + GM',output:'Regional action plan',metrics:[
+  m('mr_branch','Branch-wise sales','Every branch against its month target','ERP','%','up',3),
+  m('mr_profit','Branch profitability','Gross profit earned branch-wise','Finance report','%','up',3),
+  m('mr_prod','Productivity','Sales per executive for the month','ERP','₹','up',2),
+  m('mr_coll','Collection efficiency','Collected value against receivable due','Finance report','%','up',3),
+  m('mr_inv','Inventory position','Stock turns achieved for the region','Inventory report','Turns','up',2)]},
+
+{id:'m-cust',cycle:'Monthly',name:'Sales & Customer Review',when:'2nd week',lead:'GM',people:'GM + RM + Sales Team',output:'Customer growth actions',metrics:[
+  m('mu_new','New customers','First-time buyers added in the month','Sales register','Nos','up',3),
+  m('mu_rep','Repeat customers','Customers who bought again','Sales register','Nos','up',3),
+  m('mu_dorm','Dormant reactivated','Dormant accounts revived in the month','CRM','Nos','up',3),
+  m('mu_b2b','B2B revenue','Business-to-business sales value','ERP','₹','up',2),
+  m('mu_b2c','B2C revenue','Retail sales value','ERP','₹','up',2)]},
+
+{id:'m-inv',cycle:'Monthly',name:'Inventory Review',when:'2nd week',lead:'GM',people:'GM + Purchase + Inventory + RM',output:'Stock correction plan',metrics:[
+  m('mi_age','Stock ageing','Value of stock past the ageing limit','Stock ageing','₹','down',3),
+  m('mi_dead','Dead stock','Value of non-moving stock','Stock ageing','₹','down',3),
+  m('mi_exp','Near-expiry stock','Value approaching expiry','Expiry report','₹','down',2),
+  m('mi_avail','Stock availability','Listed items available when asked for','Inventory report','%','up',3),
+  m('mi_fast','Fast-moving cover','Days of cover held on fast movers','Inventory report','Days','up',2)]},
+
+{id:'m-credit',cycle:'Monthly',name:'Collection & Credit Review',when:'2nd / 3rd week',lead:'GM',people:'GM + Finance + RM',output:'Credit control actions',metrics:[
+  m('mk_recv','Total receivables','Outstanding carried by the region','Finance ledger','₹','down',3),
+  m('mk_over','Overdue receivables','Receivable past the agreed credit period','Ageing report','₹','down',3),
+  m('mk_limit','Credit limit breaches','Customers billed beyond their sanctioned limit','Finance report','Nos','down',2),
+  m('mk_dso','Collection days','Average days taken to collect a rupee of sales','Finance report','Days','down',2),
+  m('mk_eff','Collection efficiency','Collected value against value due','Finance report','%','up',3)]},
+
+{id:'m-mktg',cycle:'Monthly',name:'Marketing Performance Review',when:'3rd week',lead:'GM',people:'GM + Marketing / Digital Team + RM',output:'Marketing plan for next month',metrics:[
+  m('mm_leads','Leads received','Total enquiries for the region','Lead sheet','Nos','up',3),
+  m('mm_conv','Lead conversion','Leads that became customers','CRM','%','up',3),
+  m('mm_cost','Cost per lead','Marketing spend divided by leads received','Marketing tracker','₹','down',2),
+  m('mm_dig','Digital enquiries','Enquiries from digital channels','Marketing tracker','Nos','up',2),
+  m('mm_camp','Campaigns completed','Planned campaigns closed on schedule','Marketing tracker','Nos','up',1)]},
+
+{id:'m-benac',cycle:'Monthly',name:'BenAc – Star World Review',when:'Last week',lead:'GM',people:'BenAc Team + RM / GM as required',output:'Implementation status & recommendations',metrics:[
+  m('mb_mile','Milestones due','Project milestones scheduled this month','Project plan','Nos','up',1),
+  m('mb_done','Milestones completed','Milestones finished on time','Project plan','Nos','up',3),
+  m('mb_impl','Implementation status','Share of the agreed system actually in use','Project review','%','up',3),
+  m('mb_rec','Recommendations closed','Earlier recommendations acted on','Project review','%','up',2)]},
+
+/* ---------------- QUARTERLY ---------------- */
+{id:'q-strategy',cycle:'Quarterly',name:'Quarterly Strategy & Board Review',when:'End of quarter',lead:'MD',people:'MD + GM + Department Heads (RM contributes the regional position)',output:'Quarterly Strategic Action Plan',metrics:[
+  m('q_rev','Revenue growth','Regional revenue against the same quarter last year','Finance report','%','up',3),
+  m('q_profit','Profitability','Gross and net margin earned by the region','Finance report','%','up',3),
+  m('q_branch','Branch performance','Branches meeting their quarterly target','ERP','Branches','up',3),
+  m('q_cust','Customer growth','Net growth in the active customer base','Sales register','Nos','up',3),
+  m('q_new','New customer acquisition','First-time buyers added in the quarter','Sales register','Nos','up',2),
+  m('q_dorm','Dormant reactivation','Dormant accounts revived in the quarter','CRM','Nos','up',2),
+  m('q_mix','B2B / B2C performance','Split of revenue between the two channels','ERP','%','up',2),
+  m('q_turn','Inventory turnover','Times the regional stock turned in the quarter','Inventory report','Turns','up',3),
+  m('q_dead','Dead and slow-moving stock','Value still carried at quarter end','Stock ageing','₹','down',3),
+  m('q_wc','Working capital','Capital locked in stock and receivables','Finance report','₹','down',2),
+  m('q_recv','Collection & receivables','Collection achieved and overdue carried forward','Finance report','%','up',3),
+  m('q_roi','Marketing ROI','Revenue earned per rupee of marketing spend','Marketing tracker','Ratio','up',2),
+  m('q_hr','HR & organisational performance','Manpower strength, attrition and training done','HR report','%','up',2),
+  m('q_risk','Major risks','Risks carried into the next quarter','Review minutes','Nos','down',2),
+  m('q_proj','Strategic projects','Projects on schedule for the region','Project plan','%','up',2),
+  m('q_exp','Expansion opportunities','New branches or territories proposed','Business plan','Nos','up',1),
+  m('q_close','Previous quarter action closure','Last quarter action plan completed','Task Management System','%','up',3),
+  m('q_next','Next-quarter strategy','Actions agreed with owner and deadline','Action plan','Nos','up',2)]}
+];
+
+const CYCLES=['Daily','Weekly','Monthly','Quarterly'];
+const DEFAULT_RMS=[{id:'rm1',name:'Regional Manager 1'},{id:'rm2',name:'Regional Manager 2'},{id:'rm3',name:'Regional Manager 3'}];
+
+/* ---------------- state ---------------- */
+const LS='sw_rm_matrix_v1';
+let state={rms:DEFAULT_RMS.map(r=>({...r})),data:{},reviewEdits:{},customReviews:[],removedReviews:[]};
+
+function cloneReview(r){return JSON.parse(JSON.stringify(r));}
+function liveReviews(){
+  const base=BASE_REVIEWS
+    .filter(r=>!(state.removedReviews||[]).includes(r.id))
+    .map(r=>{
+      const ed=state.reviewEdits&&state.reviewEdits[r.id];
+      return ed ? {...r,...ed,metrics:(ed.metrics&&ed.metrics.length)?ed.metrics:r.metrics} : r;
+    });
+  const custom=(state.customReviews||[]).filter(r=>!(state.removedReviews||[]).includes(r.id));
+  return base.concat(custom);
+}
+function newMetricId(){return 'x'+Math.random().toString(36).slice(2,8);}
+function newReviewId(){return 'custom-'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);}
+let cycle='Daily', rmId='rm1', reviewId=BASE_REVIEWS[0].id, view='matrix';
+let repCycle='Daily', repRm='ALL';
+let today=new Date(), pickDate=new Date();
+let db=null, downloads=null, saveTimer=null;
+
+function pad(n){return n<10?'0'+n:''+n;}
+function isoWeek(d){
+  const t=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()));
+  const day=t.getUTCDay()||7; t.setUTCDate(t.getUTCDate()+4-day);
+  const y0=new Date(Date.UTC(t.getUTCFullYear(),0,1));
+  return {y:t.getUTCFullYear(),w:Math.ceil(((t-y0)/86400000+1)/7)};
+}
+function periodKey(c){
+  c=c||cycle; const d=pickDate, y=d.getFullYear();
+  if(c==='Daily') return 'd'+y+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+  if(c==='Weekly'){const w=isoWeek(d); return 'w'+w.y+'-W'+pad(w.w);}
+  if(c==='Monthly') return 'm'+y+'-'+pad(d.getMonth()+1);
+  return 'q'+y+'-Q'+(Math.floor(d.getMonth()/3)+1);
+}
+function periodLabel(c){
+  c=c||cycle; const d=pickDate, mo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  if(c==='Daily') return d.getDate()+' '+mo[d.getMonth()]+' '+d.getFullYear();
+  if(c==='Weekly'){const w=isoWeek(d); return 'Week '+w.w+', '+w.y;}
+  if(c==='Monthly') return mo[d.getMonth()]+' '+d.getFullYear();
+  return 'Q'+(Math.floor(d.getMonth()/3)+1)+' '+d.getFullYear();
+}
+function cellKey(rm,rev){const r=review(rev); return rm+'|'+rev+'|'+periodKey(r?r.cycle:cycle);}
+function entry(rm,rev){return state.data[cellKey(rm,rev)]||null;}
+function ensure(rm,rev){const k=cellKey(rm,rev); if(!state.data[k]) state.data[k]={v:{},act:{}}; return state.data[k];}
+function review(id){return liveReviews().find(r=>r.id===id);}
+function cycleReviews(c){c=c||cycle; return liveReviews().filter(r=>r.cycle===c);}
+
+/* ---------------- scoring ---------------- */
+function achievement(met,val){
+  const t=parseFloat(val.t), a=parseFloat(val.a);
+  if(!isFinite(t)||!isFinite(a)||t===0) return null;
+  const p=met.dir==='down' ? (t/a)*100 : (a/t)*100;
+  if(!isFinite(p)||p<0) return null;
+  return Math.round(p*10)/10;
+}
+function reviewStats(rm,rev){
+  const r=review(rev), e=entry(rm,rev);
+  let filled=0, wtotal=0, wach=0;
+  r.metrics.forEach(met=>{
+    wtotal+=met.w;
+    const v=(e&&e.v[met.id])||{};
+    const p=achievement(met,v);
+    if(p!==null){filled++; wach+=Math.min(p,120)*met.w;}
+  });
+  const created=e&&e.act&&parseFloat(e.act.created), closed=e&&e.act&&parseFloat(e.act.closed);
+  const actPct=isFinite(created)&&created>0&&isFinite(closed)?Math.round(Math.min(closed/created,1)*100):null;
+  return {
+    total:r.metrics.length, filled,
+    completion:Math.round(filled/r.metrics.length*100),
+    score: filled? Math.round(wach/wtotal) : null,
+    actPct, created:isFinite(created)?created:null, closed:isFinite(closed)?closed:null
+  };
+}
+function rmStats(rm,c){
+  const list=cycleReviews(c); let f=0,t=0,ws=0,wa=0,done=0;
+  list.forEach(r=>{const s=reviewStats(rm,r.id); f+=s.filled; t+=s.total;
+    if(s.score!==null){ws+=s.filled; wa+=s.score*s.filled;}
+    if(s.completion===100) done++;});
+  return {completion:t?Math.round(f/t*100):0, score:ws?Math.round(wa/ws):null, done, reviews:list.length};
+}
+function band(p){ if(p===null||p===undefined) return 'none'; if(p>=100) return 'ok'; if(p>=85) return 'watch'; return 'gap';}
+function bandWord(p){ if(p===null||p===undefined) return 'Not entered'; if(p>=100) return 'On target'; if(p>=85) return 'Watch'; return 'Gap';}
+function barColor(p){ if(p===null) return 'var(--line)'; if(p>=100) return 'var(--green)'; if(p>=85) return 'var(--amber)'; return 'var(--red)';}
+
+/* ---------------- persistence ---------------- */
+const SHARED_RM_API='https://script.google.com/macros/s/AKfycbwlDBYCsbdJXpx2Jo5bs7bPUFqkmRYl5fXNGNNLDg4Ui2mYAxrnx2iv7zHQuGlz945cOg/exec';
+
+function loadLocal(){
+  try{ const raw=localStorage.getItem(LS); if(raw){const o=JSON.parse(raw);
+    if(o.rms&&o.rms.length) state.rms=o.rms; if(o.data) state.data=o.data;
+    if(o.reviewEdits) state.reviewEdits=o.reviewEdits;
+    if(o.customReviews) state.customReviews=o.customReviews;
+    if(o.removedReviews) state.removedReviews=o.removedReviews;
+  } }catch(e){}
+}
+function saveLocal(){ try{ localStorage.setItem(LS,JSON.stringify(state)); }catch(e){} }
+
+let sharedSaveTimer=null;
+function save(kind){
+  saveLocal();
+  clearTimeout(sharedSaveTimer);
+  sharedSaveTimer=setTimeout(async()=>{
+    try{
+      const response=await fetch(SHARED_RM_API,{
+        method:'POST',
+        headers:{'Content-Type':'text/plain;charset=utf-8'},
+        body:JSON.stringify({action:'saveState',state:state})
+      });
+      const result=await response.json();
+      $('#sync-note').textContent=result.ok
+        ? '✓ Saved · Shared with all devices'
+        : '⚠ Shared save failed';
+    }catch(e){
+      console.error('Shared save failed:',e);
+      $('#sync-note').textContent='Offline · Saved locally';
+    }
+  },700);
+}
+
+async function loadSharedState(){
+  try{
+    const response=await fetch(SHARED_RM_API+'?t='+Date.now());
+    const result=await response.json();
+
+    if(result.ok&&result.initialized&&result.state){
+      state=result.state;
+      saveLocal();
+      if(!state.rms||!state.rms.length) state.rms=DEFAULT_RMS.map(r=>({...r}));
+      if(!state.data) state.data={};
+      if(!state.reviewEdits) state.reviewEdits={};
+      if(!state.customReviews) state.customReviews=[];
+      if(!state.removedReviews) state.removedReviews=[];
+      renderAll();
+      $('#sync-note').textContent='✓ Synced · Shared with all devices';
+    }
+  }catch(e){
+    console.error('Shared load failed:',e);
+    $('#sync-note').textContent='Offline · Using local data';
+  }
+}
+/* ---------------- render: top ---------------- */
+const $=s=>document.querySelector(s);
+function renderCycles(){
+  $('#cycles').innerHTML=CYCLES.map(c=>
+    '<button data-c="'+c+'" aria-pressed="'+(c===cycle)+'">'+c+'</button>').join('');
+}
+function renderRail(){
+  $('#rail').innerHTML=state.rms.map(r=>{
+    const s=rmStats(r.id), sel=r.id===rmId;
+    return '<div class="rm-card" role="button" tabindex="0" data-rm="'+r.id+'" aria-pressed="'+sel+'">'+
+      (state.rms.length>1?'<button class="rm-del" data-del="'+r.id+'" title="Remove this manager" aria-label="Remove '+esc(r.name)+'">&times;</button>':'')+
+      '<div class="who"><input class="rm-name" value="'+esc(r.name)+'" data-name="'+r.id+'" aria-label="Regional Manager name"></div>'+
+      '<div class="rm-score">'+(s.score===null?'—':s.score+'<small>%</small>')+'</div>'+
+      '<div class="rm-sub">'+cycle.toLowerCase()+' region score · '+periodLabel()+'</div>'+
+      '<div class="bar"><i style="width:'+Math.min(s.score||0,100)+'%;background:'+barColor(s.score)+'"></i></div>'+
+      '<div class="rm-sub" style="margin-top:8px">'+s.done+' of '+s.reviews+' reviews fully entered · '+s.completion+'% of metrics filled</div>'+
+      '<div class="bar thin"><i style="width:'+s.completion+'%;background:var(--indigo)"></i></div>'+
+    '</div>';
+  }).join('')+'<button class="add-rm" id="add-rm">+ Add a Regional Manager</button>';
+}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/"/g,'&quot;');}
+
+/* ---------------- render: review list ---------------- */
+function renderList(){
+  const list=cycleReviews();
+  $('#list-title').textContent=cycle+' reviews';
+  $('#list-sub').textContent=list.length+' reviews · '+list.reduce((a,r)=>a+r.metrics.length,0)+' metrics';
+  $('#rev-list').innerHTML=list.map(r=>{
+    const s=reviewStats(rmId,r.id);
+    return '<button class="rev-item" data-rev="'+r.id+'" aria-pressed="'+(r.id===reviewId)+'">'+
+      '<span class="t"><span>'+r.name+'</span><span class="pct '+band(s.score)+'">'+(s.score===null?'—':s.score+'%')+'</span></span>'+
+      '<span class="m">'+r.when+' · led by '+r.lead+'</span>'+
+      '<span class="bar thin"><i style="width:'+s.completion+'%;background:var(--indigo)"></i></span>'+
+      '<span class="m">'+s.filled+' of '+s.total+' metrics entered</span>'+
+    '</button>';
+  }).join('');
+}
+
+/* ---------------- render: detail ---------------- */
+function renderDetail(){
+  const r=review(reviewId);
+  if(!r||r.cycle!==cycle){ reviewId=cycleReviews()[0].id; return renderDetail(); }
+  const rm=state.rms.find(x=>x.id===rmId), e=ensure(rmId,reviewId), s=reviewStats(rmId,reviewId);
+  const rows=r.metrics.map(met=>{
+    const v=e.v[met.id]||{}, p=achievement(met,v), b=band(p);
+    return '<tr>'+
+      '<td><div class="m-name">'+met.name+'</div><div class="m-what">'+met.what+'</div>'+
+      '<div class="m-src">Source: '+met.src+' · weight '+met.w+' · '+(met.dir==='down'?'lower is better':'higher is better')+'</div></td>'+
+      '<td><input class="num" inputmode="decimal" data-f="t" data-m="'+met.id+'" value="'+esc(v.t||'')+'" aria-label="Target for '+met.name+'"><span class="unit">'+met.unit+'</span></td>'+
+      '<td><input class="num" inputmode="decimal" data-f="a" data-m="'+met.id+'" value="'+esc(v.a||'')+'" aria-label="Actual for '+met.name+'"><span class="unit">'+met.unit+'</span></td>'+
+      '<td><div class="ach '+b+'">'+(p===null?'—':p+'%')+'</div>'+
+      '<div class="bar thin" style="width:70px"><i style="width:'+Math.min(p||0,100)+'%;background:'+barColor(p)+'"></i></div></td>'+
+      '<td><span class="chip '+b+'">'+bandWord(p)+'</span></td>'+
+      '<td><input class="note" data-f="n" data-m="'+met.id+'" value="'+esc(v.n||'')+'" placeholder="Reason / action" aria-label="Remark for '+met.name+'"></td>'+
+    '</tr>';
+  }).join('');
+
+  $('#detail').innerHTML=
+    '<div class="detail-head">'+
+      '<h2>'+r.name+'</h2>'+
+      '<div style="font-size:12.5px;color:var(--ink-soft)">'+esc(rm.name)+' · '+periodLabel()+'</div>'+
+      '<div class="meta">'+
+        '<span><b>'+r.when+'</b></span><span>Led by <b>'+r.lead+'</b></span>'+
+        '<span>'+r.people+'</span><span>Output: <b>'+r.output+'</b></span>'+
+        '<span>Score <b class="'+band(s.score)+'">'+(s.score===null?'—':s.score+'%')+'</b></span>'+
+        '<span>Completion <b>'+s.completion+'%</b></span>'+
+      '</div>'+
+    '</div>'+
+    '<div class="scroll"><table class="mtable"><thead><tr>'+
+      '<th>Metric evaluated</th><th>Target</th><th>Actual</th><th>Achievement</th><th>Status</th><th>Remark</th>'+
+    '</tr></thead><tbody>'+rows+'</tbody></table></div>'+
+    '<div class="closeout">'+
+      '<div class="field"><label for="act-c">Action points raised</label><input class="num" id="act-c" data-f="created" inputmode="numeric" value="'+esc((e.act&&e.act.created)||'')+'"></div>'+
+      '<div class="field"><label for="act-x">Action points closed</label><input class="num" id="act-x" data-f="closed" inputmode="numeric" value="'+esc((e.act&&e.act.closed)||'')+'"></div>'+
+      '<div class="field"><label>Action closure</label><div class="ach '+band(s.actPct)+'" style="padding-bottom:6px">'+(s.actPct===null?'—':s.actPct+'%')+'</div></div>'+
+      '<div class="spacer"></div>'+
+      '<button class="btn ghost" id="clear-rev">Clear this review</button>'+
+      '<button class="btn" id="export-btn">Download this cycle (CSV)</button>'+
+    '</div>';
+}
+
+/* ---------------- render: dashboard ---------------- */
+function allGaps(){
+  const out=[];
+  state.rms.forEach(rm=>liveReviews().forEach(r=>{
+    const e=entry(rm.id,r.id); if(!e) return;
+    r.metrics.forEach(met=>{
+      const v=e.v[met.id]||{}, p=achievement(met,v);
+      if(p!==null&&p<85) out.push({rm:rm.name,rev:r,met,p,v});
+    });
+  }));
+  return out.sort((a,b)=>a.p-b.p);
+}
+function renderDashboard(){
+  const rows=state.rms.map(rm=>{
+    const cells=CYCLES.map(c=>{const s=rmStats(rm.id,c);
+      return '<td class="n"><span class="pct '+band(s.score)+'">'+(s.score===null?'—':s.score+'%')+'</span>'+
+        '<div class="bar thin" style="max-width:80px;margin:5px auto 0"><i style="width:'+s.completion+'%;background:var(--indigo)"></i></div>'+
+        '<div style="font-size:10.5px;color:var(--ink-soft);margin-top:3px">'+s.completion+'% filled</div></td>';}).join('');
+    const all=CYCLES.map(c=>rmStats(rm.id,c).score).filter(v=>v!==null);
+    const avg=all.length?Math.round(all.reduce((a,b)=>a+b,0)/all.length):null;
+    return '<tr><td><b>'+esc(rm.name)+'</b></td>'+cells+
+      '<td class="n"><span class="pct '+band(avg)+'">'+(avg===null?'—':avg+'%')+'</span></td></tr>';
+  }).join('');
+
+  let filled=0,total=0,created=0,closed=0,scores=[];
+  state.rms.forEach(rm=>liveReviews().forEach(r=>{
+    const s=reviewStats(rm.id,r.id); filled+=s.filled; total+=s.total;
+    if(s.score!==null) scores.push(s.score);
+    if(s.created!==null) created+=s.created; if(s.closed!==null) closed+=s.closed;
+  }));
+  const overall=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+  const gaps=allGaps();
+  const pendingRev=[];
+  state.rms.forEach(rm=>liveReviews().forEach(r=>{
+    if(reviewStats(rm.id,r.id).filled===0) pendingRev.push(esc(rm.name)+' · '+r.name+' ('+r.cycle+')');
+  }));
+
+  $('#view-dashboard').innerHTML=
+   '<div class="stat-strip">'+
+     '<div class="stat"><div class="k">Overall achievement</div><div class="v '+band(overall)+'">'+(overall===null?'—':overall+'%')+'</div></div>'+
+     '<div class="stat"><div class="k">Metrics entered</div><div class="v">'+filled+'<small style="font-size:14px;color:var(--ink-soft)"> / '+total+'</small></div></div>'+
+     '<div class="stat"><div class="k">Action points closed</div><div class="v">'+(created?Math.round(closed/created*100)+'%':'—')+'</div>'+
+       '<div class="k" style="margin-top:3px">'+closed+' of '+created+' raised</div></div>'+
+     '<div class="stat"><div class="k">Metrics in gap</div><div class="v '+(gaps.length?'gap':'')+'">'+gaps.length+'</div>'+
+       '<div class="k" style="margin-top:3px">below 85% of target</div></div>'+
+     '<div class="stat"><div class="k">Regional Managers</div><div class="v">'+state.rms.length+'</div></div>'+
+   '</div>'+
+
+   '<section class="panel" style="margin-bottom:16px"><div class="panel-head"><h2>Achievement by review cycle</h2>'+
+     '<div class="spacer"></div><p>'+periodLabel('Daily')+' · '+periodLabel('Weekly')+' · '+periodLabel('Monthly')+' · '+periodLabel('Quarterly')+'</p></div>'+
+     '<div class="scroll"><table class="cmp"><tr><th>Regional Manager</th>'+
+       CYCLES.map(c=>'<th>'+c+'</th>').join('')+'<th>Average</th></tr>'+rows+'</table></div></section>'+
+
+   '<section class="panel" style="margin-bottom:16px"><div class="panel-head"><h2>Where the gaps are</h2>'+
+     '<div class="spacer"></div><p>Weakest metrics first. These are the ones that should become action points.</p></div>'+
+     (gaps.length? gaps.slice(0,15).map(g=>
+       '<div class="gap-row"><div><b>'+g.met.name+'</b>'+
+         '<div class="who">'+esc(g.rm)+' · '+g.rev.name+' · target '+g.v.t+' '+g.met.unit+', actual '+g.v.a+' '+g.met.unit+'</div>'+
+         (g.v.n?'<div class="rem">'+esc(g.v.n)+'</div>':'')+'</div>'+
+         '<div class="pct gap">'+g.p+'%</div></div>').join('')
+       : '<div class="empty">No metric is below 85% of target yet. Enter targets and actuals in the review matrix.</div>')+
+   '</section>'+
+
+   '<section class="panel"><div class="panel-head"><h2>Reviews still to be filled in</h2>'+
+     '<div class="spacer"></div><p>'+pendingRev.length+' of '+(state.rms.length*liveReviews().length)+' review sheets are empty for this period.</p></div>'+
+     (pendingRev.length? '<div class="dict-group"><ul>'+pendingRev.slice(0,24).map(x=>'<li>'+x+'</li>').join('')+
+       (pendingRev.length>24?'<li><span>and '+(pendingRev.length-24)+' more</span></li>':'')+'</ul></div>'
+       : '<div class="empty">Every review sheet has been started. Good.</div>')+
+   '</section>';
+}
+
+/* ---------------- render: printable report ---------------- */
+function renderReport(){
+  const rmList = repRm==='ALL' ? state.rms : state.rms.filter(r=>r.id===repRm);
+  const list = cycleReviews(repCycle);
+  const genDate = new Date().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'});
+
+  const controls =
+    '<div class="report-controls no-print">'+
+      '<div><label>Cycle</label><select id="rep-cycle">'+CYCLES.map(c=>'<option value="'+c+'" '+(c===repCycle?'selected':'')+'>'+c+'</option>').join('')+'</select></div>'+
+      '<div><label>Regional Manager</label><select id="rep-rm"><option value="ALL" '+(repRm==='ALL'?'selected':'')+'>All Regional Managers</option>'+
+        state.rms.map(r=>'<option value="'+r.id+'" '+(r.id===repRm?'selected':'')+'>'+esc(r.name)+'</option>').join('')+'</select></div>'+
+      '<div class="spacer"></div>'+
+      '<button class="btn" id="print-btn">Print / Save as PDF</button>'+
+    '</div>';
+
+  const sections = rmList.map(rm=>{
+    const s = rmStats(rm.id, repCycle);
+    const revBlocks = list.map(r=>{
+      const rs = reviewStats(rm.id, r.id), e = entry(rm.id,r.id);
+      const rows = r.metrics.map(met=>{
+        const v=(e&&e.v[met.id])||{}, p=achievement(met,v), b=band(p);
+        return '<tr><td>'+met.name+'<div class="rp-what">'+met.what+'</div></td>'+
+          '<td class="n">'+(v.t||'—')+'</td><td class="n">'+(v.a||'—')+'</td>'+
+          '<td class="n"><b class="rp-'+b+'">'+(p===null?'—':p+'%')+'</b></td>'+
+          '<td class="n"><span class="rp-tag rp-'+b+'">'+bandWord(p)+'</span></td>'+
+          '<td>'+(v.n?esc(v.n):'')+'</td></tr>';
+      }).join('');
+      return '<div class="rp-review">'+
+        '<h4>'+r.name+' <span class="rp-when">— '+r.when+' · led by '+r.lead+'</span>'+
+          '<span class="rp-score rp-'+band(rs.score)+'">'+(rs.score===null?'No data':rs.score+'%')+'</span></h4>'+
+        '<table class="rp-table"><thead><tr><th>Metric</th><th>Target</th><th>Actual</th><th>Achv.</th><th>Status</th><th>Remark</th></tr></thead>'+
+        '<tbody>'+rows+'</tbody></table>'+
+        '<div class="rp-out">Required output: '+r.output+' · Action points: '+
+          (e&&e.act&&e.act.closed!=null?e.act.closed:'—')+' of '+(e&&e.act&&e.act.created!=null?e.act.created:'—')+' closed</div>'+
+      '</div>';
+    }).join('');
+    return '<section class="rp-manager">'+
+      '<div class="rp-mhead"><h3>'+esc(rm.name)+'</h3>'+
+        '<div class="rp-mstat"><b class="rp-'+band(s.score)+'">'+(s.score===null?'No data':s.score+'%')+'</b> overall '+repCycle.toLowerCase()+' achievement · '+s.completion+'% of metrics entered · '+s.done+' of '+s.reviews+' reviews complete</div></div>'+
+      revBlocks+
+    '</section>';
+  }).join('');
+
+  $('#view-report').innerHTML = controls +
+    '<div id="printable">'+
+      '<div class="rp-head">'+
+        '<div class="rp-brand">STAR <span>WORLD</span></div>'+
+        '<h1>Regional Manager Review Report — '+repCycle+'</h1>'+
+        '<div class="rp-meta">Period: '+periodLabel(repCycle)+' &nbsp;·&nbsp; Prepared: '+genDate+' &nbsp;·&nbsp; Prepared by: General Manager, for MD review</div>'+
+      '</div>'+
+      (rmList.length ? sections : '<div class="empty">No Regional Manager selected.</div>')+
+      '<div class="rp-foot">Star World Group · Review & Work Calendar · Section 7 format — Previous Review, Current Performance, Corrective Actions, New Decisions</div>'+
+    '</div>';
+}
+
+/* ---------------- render: manage reviews ---------------- */
+let editingReview=null, editingIsNew=false;
+function blankMetric(){ return {id:newMetricId(),name:'',what:'',src:'',unit:'',dir:'up',w:1}; }
+function blankReview(){ return {id:newReviewId(),cycle:cycle,name:'',when:'',lead:'RM',people:'',output:'',metrics:[blankMetric()]}; }
+
+function renderManage(){
+  if(editingReview){ renderReviewEditor(); return; }
+  const list=cycleReviews();
+  const rows=list.map(r=>{
+    const custom=r.id.indexOf('custom-')===0;
+    return '<div class="mng-row"><div class="mng-info"><div class="t">'+esc(r.name)+
+      (custom?' <span style="color:var(--indigo);font-weight:700;font-size:10.5px">CUSTOM</span>':'')+'</div>'+
+      '<div class="m">'+esc(r.when)+' · led by '+esc(r.lead)+' · '+r.metrics.length+' metrics</div></div>'+
+      '<div class="mng-actions"><button class="icon-btn" data-edit-rev="'+r.id+'">Edit</button>'+
+      '<button class="icon-btn danger" data-remove-rev="'+r.id+'">Remove</button></div></div>';
+  }).join('');
+  $('#view-manage').innerHTML='<section class="panel"><div class="panel-head"><h2>Manage '+cycle+' reviews</h2>'+
+    '<div class="spacer"></div><p>Add, edit or remove — this changes what every Regional Manager sees.</p></div>'+
+    (rows||'<div class="empty">No reviews in this cycle yet.</div>')+
+    '<button class="add-review" id="mng-add">+ Add a review to '+cycle+'</button></section>';
+}
+
+function renderReviewEditor(){
+  const r=editingReview;
+  const metricsHtml=r.metrics.map((met,i)=>
+    '<div class="mrow">'+
+      (r.metrics.length>1?'<button class="rm-metric" data-rm-metric="'+i+'" aria-label="Remove metric" title="Remove metric">&times;</button>':'')+
+      '<div class="mgrid">'+
+        '<div class="efield" style="margin-bottom:0"><label>Metric name</label><input data-mf="name" data-mi="'+i+'" value="'+esc(met.name)+'"></div>'+
+        '<div class="efield" style="margin-bottom:0"><label>Data source</label><input data-mf="src" data-mi="'+i+'" value="'+esc(met.src)+'"></div>'+
+      '</div>'+
+      '<div class="efield" style="margin:9px 0 0"><label>What is evaluated</label><textarea data-mf="what" data-mi="'+i+'">'+esc(met.what)+'</textarea></div>'+
+      '<div class="mgrid3">'+
+        '<div class="efield" style="margin-bottom:0"><label>Unit</label><input data-mf="unit" data-mi="'+i+'" value="'+esc(met.unit)+'" placeholder="₹, %, Nos"></div>'+
+        '<div class="efield" style="margin-bottom:0"><label>Direction</label><select data-mf="dir" data-mi="'+i+'">'+
+          '<option value="up" '+(met.dir==='up'?'selected':'')+'>Higher better</option>'+
+          '<option value="down" '+(met.dir==='down'?'selected':'')+'>Lower better</option></select></div>'+
+        '<div class="efield" style="margin-bottom:0"><label>Weight</label><input data-mf="w" data-mi="'+i+'" type="number" min="1" max="5" value="'+met.w+'"></div>'+
+      '</div>'+
+    '</div>').join('');
+
+  $('#view-manage').innerHTML='<section class="panel"><div class="panel-head"><h2>'+(editingIsNew?'New review':'Edit review')+'</h2>'+
+    '<div class="spacer"></div><p id="ef-warn" style="color:var(--red)"></p></div>'+
+    '<div class="editor">'+
+      '<div class="erow2">'+
+        '<div class="efield"><label>Review name</label><input id="ef-name" value="'+esc(r.name)+'"></div>'+
+        '<div class="efield"><label>When</label><input id="ef-when" value="'+esc(r.when)+'" placeholder="e.g. Tuesday, or 2nd week"></div>'+
+      '</div>'+
+      '<div class="erow2">'+
+        '<div class="efield"><label>Led by</label><input id="ef-lead" value="'+esc(r.lead)+'" placeholder="RM / GM / MD"></div>'+
+        '<div class="efield"><label>Cycle</label><select id="ef-cycle">'+CYCLES.map(c=>'<option value="'+c+'" '+(c===r.cycle?'selected':'')+'>'+c+'</option>').join('')+'</select></div>'+
+      '</div>'+
+      '<div class="efield"><label>Who attends</label><input id="ef-people" value="'+esc(r.people)+'"></div>'+
+      '<div class="efield"><label>Expected output</label><input id="ef-output" value="'+esc(r.output)+'"></div>'+
+      '<div class="mtitle">Metrics evaluated in this review</div>'+
+      metricsHtml+
+      '<button class="add-metric" id="ef-add-metric">+ Add a metric</button>'+
+      '<div class="editor-actions"><button class="btn ghost" id="ef-cancel">Cancel</button><button class="btn" id="ef-save">Save review</button></div>'+
+    '</div></section>';
+}
+
+function saveReviewEditor(){
+  const r=editingReview;
+  r.name=$('#ef-name').value.trim();
+  r.when=$('#ef-when').value.trim();
+  r.lead=$('#ef-lead').value.trim()||'RM';
+  r.cycle=$('#ef-cycle').value;
+  r.people=$('#ef-people').value.trim();
+  r.output=$('#ef-output').value.trim();
+  r.metrics=r.metrics.filter(m=>m.name && m.name.trim());
+  if(!r.name){ $('#ef-warn').textContent='Give the review a name before saving.'; return; }
+  if(!r.metrics.length){ $('#ef-warn').textContent='Add at least one named metric before saving.'; return; }
+
+  const isBase=BASE_REVIEWS.some(b=>b.id===r.id);
+  if(isBase){
+    state.reviewEdits=state.reviewEdits||{};
+    state.reviewEdits[r.id]={name:r.name,when:r.when,lead:r.lead,cycle:r.cycle,people:r.people,output:r.output,metrics:r.metrics};
+  }else{
+    state.customReviews=state.customReviews||[];
+    const idx=state.customReviews.findIndex(x=>x.id===r.id);
+    if(idx>=0) state.customReviews[idx]=r; else state.customReviews.push(r);
+  }
+  cycle=r.cycle; reviewId=r.id;
+  editingReview=null; editingIsNew=false;
+  save('reviews'); renderAll();
+}
+
+/* ---------------- render: compare ---------------- */
+function renderCompare(){
+  const list=cycleReviews();
+  const head='<tr><th>Review</th>'+state.rms.map(r=>'<th>'+esc(r.name)+'</th>').join('')+'<th>Region view</th></tr>';
+  const rows=list.map(r=>{
+    const cells=state.rms.map(x=>{const s=reviewStats(x.id,r.id);
+      return '<td class="n"><span class="pct '+band(s.score)+'">'+(s.score===null?'—':s.score+'%')+'</span>'+
+        '<div class="bar thin" style="max-width:90px;margin:5px auto 0"><i style="width:'+s.completion+'%;background:var(--indigo)"></i></div>'+
+        '<div style="font-size:10.5px;color:var(--ink-soft);margin-top:3px">'+s.filled+'/'+s.total+' entered</div></td>';}).join('');
+    const scores=state.rms.map(x=>reviewStats(x.id,r.id).score).filter(v=>v!==null);
+    const avg=scores.length?Math.round(scores.reduce((a,b)=>a+b,0)/scores.length):null;
+    return '<tr><td><b>'+r.name+'</b><div style="font-size:11px;color:var(--ink-soft)">'+r.when+' · '+r.metrics.length+' metrics</div></td>'+cells+
+      '<td class="n"><span class="pct '+band(avg)+'">'+(avg===null?'—':avg+'%')+'</span></td></tr>';
+  }).join('');
+  const totals='<tr style="background:var(--line-soft)"><td><b>'+cycle+' overall</b></td>'+
+    state.rms.map(x=>{const s=rmStats(x.id);
+      return '<td class="n"><span class="pct '+band(s.score)+'">'+(s.score===null?'—':s.score+'%')+'</span>'+
+      '<div style="font-size:10.5px;color:var(--ink-soft)">'+s.completion+'% filled</div></td>';}).join('')+'<td class="n">—</td></tr>';
+  $('#view-compare').innerHTML='<section class="panel"><div class="panel-head"><h2>'+cycle+' reviews · '+periodLabel()+
+    '</h2><div class="spacer"></div><p>Achievement is weighted by metric importance. The bar shows how much of the review has been filled in.</p></div>'+
+    '<div class="scroll"><table class="cmp">'+head+totals+rows+'</table></div></section>';
+}
+
+/* ---------------- render: dictionary ---------------- */
+function renderDict(){
+  $('#view-dictionary').innerHTML='<section class="panel"><div class="panel-head"><h2>What gets measured in every '+cycle.toLowerCase()+' review</h2>'+
+    '<div class="spacer"></div><p>Same definitions for all three Regional Managers, so the numbers compare across regions.</p></div>'+
+    cycleReviews().map(r=>'<div class="dict-group"><h3>'+r.name+' — '+r.when+' · led by '+r.lead+'</h3><ul>'+
+      r.metrics.map(met=>'<li><b>'+met.name+'</b> — <span>'+met.what+'. Measured in '+met.unit+
+        ', from '+met.src+'. '+(met.dir==='down'?'A lower number is better.':'A higher number is better.')+'</span></li>').join('')+
+      '</ul></div>').join('')+'</section>';
+}
+
+function renderAll(){
+  $('#period-label').textContent=periodLabel();
+  renderCycles(); renderRail();
+  if(view==='matrix'){ renderList(); renderDetail(); }
+  if(view==='dashboard') renderDashboard();
+  if(view==='compare') renderCompare();
+  if(view==='dictionary') renderDict();
+  if(view==='report') renderReport();
+  if(view==='manage') renderManage();
+}
+
+/* ---------------- events ---------------- */
+document.addEventListener('click',ev=>{
+  const c=ev.target.closest('#cycles button');
+  if(c){ cycle=c.dataset.c; reviewId=cycleReviews()[0].id; renderAll(); return; }
+  const del=ev.target.closest('.rm-del');
+  if(del){
+    const r=state.rms.find(x=>x.id===del.dataset.del); if(!r) return;
+    if(del.dataset.armed!=='1'){
+      del.dataset.armed='1'; del.textContent='Remove?'; del.style.color='var(--red)';
+      setTimeout(()=>{ if(del.isConnected){ del.dataset.armed=''; del.innerHTML='&times;'; del.style.color=''; } },3000);
+      return; }
+    state.rms=state.rms.filter(x=>x.id!==r.id);
+    if(rmId===r.id) rmId=state.rms[0].id;
+    save('rms'); renderAll(); return; }
+  if(ev.target.id==='add-rm'){
+    const id='rm'+Date.now().toString(36);
+    state.rms.push({id,name:'Regional Manager '+(state.rms.length+1)});
+    rmId=id; save('rms'); renderAll();
+    const box=document.querySelector('[data-name="'+id+'"]');
+    if(box){ box.focus(); box.select(); }
+    return; }
+  if(ev.target.id==='print-btn'){ window.print(); return; }
+  const em=ev.target.closest('[data-edit-rev]');
+  if(em){ editingIsNew=false; editingReview=cloneReview(review(em.dataset.editRev)); renderManage(); return; }
+  const rm2=ev.target.closest('[data-remove-rev]');
+  if(rm2){
+    if(rm2.dataset.armed!=='1'){
+      rm2.dataset.armed='1'; rm2.textContent='Confirm remove';
+      setTimeout(()=>{ if(rm2.isConnected){ rm2.dataset.armed=''; rm2.textContent='Remove'; } },3000);
+      return; }
+    const id=rm2.dataset.removeRev;
+    if(id.indexOf('custom-')===0) state.customReviews=(state.customReviews||[]).filter(x=>x.id!==id);
+    else { state.removedReviews=state.removedReviews||[]; if(!state.removedReviews.includes(id)) state.removedReviews.push(id); }
+    if(state.reviewEdits) delete state.reviewEdits[id];
+    if(reviewId===id){ const first=cycleReviews()[0]; reviewId=first?first.id:null; }
+    save('reviews'); renderAll(); return; }
+  if(ev.target.id==='mng-add'){ editingIsNew=true; editingReview=blankReview(); renderManage(); return; }
+  if(ev.target.id==='ef-cancel'){ editingReview=null; editingIsNew=false; renderManage(); return; }
+  if(ev.target.id==='ef-save'){ saveReviewEditor(); return; }
+  if(ev.target.id==='ef-add-metric'){ editingReview.metrics.push(blankMetric()); renderReviewEditor(); return; }
+  const rmMet=ev.target.closest('[data-rm-metric]');
+  if(rmMet){ editingReview.metrics.splice(+rmMet.dataset.rmMetric,1); renderReviewEditor(); return; }
+  const card=ev.target.closest('.rm-card');
+  if(card && !ev.target.matches('.rm-name')){ rmId=card.dataset.rm; renderAll(); return; }
+  const ri=ev.target.closest('.rev-item');
+  if(ri){ reviewId=ri.dataset.rev; renderList(); renderDetail(); return; }
+  const st=ev.target.closest('#subtabs button');
+  if(st){ view=st.dataset.view;
+    document.querySelectorAll('#subtabs button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.view===view));
+    ['dashboard','matrix','compare','dictionary','report','manage'].forEach(v=>{$('#view-'+v).hidden = v!==view;});
+    renderAll(); return; }
+  if(ev.target.id==='clear-rev'){
+    delete state.data[cellKey(rmId,reviewId)]; save('cell'); renderAll(); return; }
+  if(ev.target.id==='export-btn'){ exportCsv(); return; }
+});
+document.addEventListener('keydown',ev=>{
+  if((ev.key==='Enter'||ev.key===' ')&&ev.target.classList.contains('rm-card')){ ev.preventDefault(); ev.target.click(); }
+});
+document.addEventListener('input',ev=>{
+  const t=ev.target;
+  if(editorFieldInput(t)) return;
+  if(t.dataset.name!==undefined && t.classList.contains('rm-name')){
+    const r=state.rms.find(x=>x.id===t.dataset.name); if(r){ r.name=t.value; save('rms'); } return; }
+  if(t.dataset.m){
+    const e=ensure(rmId,reviewId); e.v[t.dataset.m]=e.v[t.dataset.m]||{};
+    e.v[t.dataset.m][t.dataset.f]=t.value; save('cell');
+    if(t.dataset.f!=='n'){ refreshRow(t); renderRail(); renderList(); }
+    return; }
+  if(t.dataset.f==='created'||t.dataset.f==='closed'){
+    const e=ensure(rmId,reviewId); e.act=e.act||{}; e.act[t.dataset.f]=t.value; save('cell');
+    const s=reviewStats(rmId,reviewId);
+    const box=t.closest('.closeout').querySelectorAll('.field .ach')[0];
+    if(box){ box.textContent=s.actPct===null?'—':s.actPct+'%'; box.className='ach '+band(s.actPct); }
+    return; }
+});
+function refreshRow(input){
+  const row=input.closest('tr'), met=review(reviewId).metrics.find(x=>x.id===input.dataset.m);
+  const v=(entry(rmId,reviewId)||{v:{}}).v[met.id]||{}, p=achievement(met,v), b=band(p);
+  const ach=row.querySelector('.ach'); ach.textContent=p===null?'—':p+'%'; ach.className='ach '+b;
+  const bar=row.querySelector('.bar i'); bar.style.width=Math.min(p||0,100)+'%'; bar.style.background=barColor(p);
+  const chip=row.querySelector('.chip'); chip.textContent=bandWord(p); chip.className='chip '+b;
+  const s=reviewStats(rmId,reviewId);
+  const head=document.querySelectorAll('.detail-head .meta span b');
+  if(head.length>=5){ head[head.length-2].textContent=(s.score===null?'—':s.score+'%'); head[head.length-2].className=band(s.score);
+    head[head.length-1].textContent=s.completion+'%'; }
+}
+function editorFieldInput(t){
+  if(!editingReview) return false;
+  const map={'ef-name':'name','ef-when':'when','ef-lead':'lead','ef-people':'people','ef-output':'output'};
+  if(map[t.id]!==undefined){ editingReview[map[t.id]]=t.value; return true; }
+  if(t.dataset.mf!==undefined && t.dataset.mi!==undefined){
+    const i=+t.dataset.mi, f=t.dataset.mf;
+    editingReview.metrics[i][f] = f==='w' ? (parseFloat(t.value)||1) : t.value;
+    return true; }
+  return false;
+}
+document.addEventListener('change',ev=>{
+  if(editorFieldInput(ev.target)) return;
+  if(ev.target.id==='ef-cycle'){ editingReview.cycle=ev.target.value; return; }
+  if(ev.target.id==='rep-cycle'){ repCycle=ev.target.value; renderReport(); return; }
+  if(ev.target.id==='rep-rm'){ repRm=ev.target.value; renderReport(); return; }
+});
+$('#period-date').addEventListener('change',e=>{
+  if(!e.target.value) return;
+  const p=e.target.value.split('-'); pickDate=new Date(+p[0],+p[1]-1,+p[2]); renderAll();
+});
+
+/* ---------------- export ---------------- */
+function csvForCycle(){
+  const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+  const lines=[['Manager','Review','When','Metric','What is evaluated','Source','Unit','Target','Actual','Achievement %','Status','Remark'].map(q).join(',')];
+  state.rms.forEach(rm=>cycleReviews().forEach(r=>{
+    const e=entry(rm.id,r.id)||{v:{}};
+    r.metrics.forEach(met=>{
+      const v=e.v[met.id]||{}, p=achievement(met,v);
+      lines.push([rm.name,r.name,r.when,met.name,met.what,met.src,met.unit,v.t||'',v.a||'',p===null?'':p,bandWord(p),v.n||''].map(q).join(','));
+    });
+  }));
+  return lines.join('\r\n');
+}
+async function exportCsv(){
+  const csv=csvForCycle(), filename='star-world-rm-matrix-'+periodKey()+'.csv';
+  if(downloads){
+    try{ await downloads.save({filename,data:'\ufeff'+csv}); return; }
+    catch(err){ if(err&&err.code==='declined') return; /* fall through to manual copy */ }
+  }
+  showCsvFallback(csv,filename);
+}
+function showCsvFallback(csv,filename){
+  const wrap=document.createElement('div');
+  wrap.className='csv-fallback'; wrap.id='csv-fallback';
+  wrap.innerHTML='<div class="csv-box" role="dialog" aria-label="Copy CSV data">'+
+    '<header><h3>Download isn\u2019t available in this view</h3><div class="spacer"></div>'+
+    '<button class="btn ghost" id="csv-close">Close</button></header>'+
+    '<p class="csv-note">Tap inside the box, select all, and copy — then paste into a spreadsheet and save as '+esc(filename)+'. '+
+    'Or use the <b>Print report</b> tab and choose Save as PDF, which works without this.</p>'+
+    '<textarea id="csv-text" readonly></textarea>'+
+    '<footer><button class="btn" id="csv-select">Select all</button><button class="btn ghost" id="csv-copy">Copy</button></footer>'+
+  '</div>';
+  document.body.appendChild(wrap);
+  const ta=wrap.querySelector('#csv-text'); ta.value=csv;
+  wrap.querySelector('#csv-close').onclick=()=>wrap.remove();
+  wrap.addEventListener('click',e=>{ if(e.target===wrap) wrap.remove(); });
+  wrap.querySelector('#csv-select').onclick=()=>{ ta.focus(); ta.select(); };
+  wrap.querySelector('#csv-copy').onclick=async()=>{
+    ta.focus(); ta.select();
+    let ok=false;
+    try{ if(navigator.clipboard&&navigator.clipboard.writeText){ await navigator.clipboard.writeText(csv); ok=true; } }catch(e){}
+    if(!ok){ try{ ok=document.execCommand('copy'); }catch(e){} }
+    const btn=wrap.querySelector('#csv-copy'); btn.textContent=ok?'Copied':'Select all + Ctrl/Cmd+C';
+  };
+}
+
+/* ---------------- boot ---------------- */
+loadLocal();
+$('#period-date').value=today.getFullYear()+'-'+pad(today.getMonth()+1)+'-'+pad(today.getDate());
+renderAll();
+
+(async()=>{
+  await loadSharedState();
+  try{ downloads=await window.claude?.use?.('downloads'); }catch(e){}
+})();
+
+setInterval(loadSharedState,5000);
+</script>
+</body>
+</html>
